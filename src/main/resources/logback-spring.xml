@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration debug="false" scan="true" scanPeriod="1 hours">
+    <!-- 定义日志文件的存储地址 忽在LogBack 的配置中使用相对地址 -->
+    <property name="LOG_HOME" value="D:/NT/demoLogs/"/>
+    <!-- 控制台输出 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!-- 控制台格式化输出 -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.sss} [%thread] %-5level %logger{50} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <!-- 按照每天生成日志 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 日志文件名 -->
+            <FileNamePattern>${LOG_HOME}/lstc.%d{yyyy-MM-dd}.log.gz</FileNamePattern>
+            <!-- 日志文件保存天数 -->
+            <MaxHistory>30</MaxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!-- 日志文件格式化输出 -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.sss} [%thread] %-5level %logger{50} - %msg%n</pattern>
+        </encoder>
+        <!-- 追加日志 -->
+        <append>true</append>
+    </appender>
+    <!-- 打印错误日志 -->
+    <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 日志文件名 -->
+            <FileNamePattern>${LOG_HOME}/lstc_error.%d{yyyy-MM-dd}.log.gz</FileNamePattern>
+            <!-- 日志文件保存天数 -->
+            <MaxHistory>10</MaxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!-- 日志文件格式化输出 -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.sss} [%thread] %-5level %logger{50} - %msg%n</pattern>
+        </encoder>
+        <!-- 追加日志 -->
+        <append>true</append>
+    </appender>
+    <!--日志输出级别-->
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="ERROR"/>
+    </root>
+</configuration>
